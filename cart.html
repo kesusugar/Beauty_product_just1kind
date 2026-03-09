@@ -443,6 +443,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function goToCheckout() {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'goToCheckout',
+        'content_id': 'beauty_serum_001',
+        'value': 4200,
+        'currency': 'JPY'
+    });
     const cart = {
       name: 'AI Beauty Serum',
       content_id: 'beauty_serum_001',

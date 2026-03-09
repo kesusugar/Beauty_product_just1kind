@@ -490,6 +490,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // Load cart data
   const cart = JSON.parse(sessionStorage.getItem('cart') || '{"quantity":1,"total":4200}');
+
+  // --- ここからDataleyr追加：GTMにAdd Payment Infoイベントを送る ---
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'addPaymentInfo',
+    'content_id': 'beauty_serum_001',
+    'value': cart.total, // 4200などの数値が自動で入ります
+    'currency': 'JPY'
+  });
+  // --- ここまで---
+
   if (cart.quantity) {
     document.getElementById('sidebar-qty').textContent = '30ml · 数量: ' + cart.quantity;
     document.getElementById('sidebar-subtotal').textContent = '¥' + cart.total.toLocaleString();
