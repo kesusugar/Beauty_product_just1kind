@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIÈRE — ご注文完了</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf7f2;
+      --warm-white: #f5f0e8;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --charcoal: #2a2520;
+      --mid: #7a6e65;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.4rem 2.5rem;
+      border-bottom: 1px solid var(--gold-light);
+      background: var(--cream);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+
+    /* STEPS - all done */
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem 0;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 500;
+    }
+    .step.done .step-circle { background: var(--gold); color: var(--cream); }
+    .step-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
+    .step-line { width: 60px; height: 1px; background: var(--gold); margin: 0 0.5rem; margin-bottom: 1.2rem; }
+
+    /* MAIN THANK YOU */
+    .thanks-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    /* Animated check circle */
+    .check-container {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin-bottom: 2rem;
+    }
+    .check-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      animation: ringPulse 2s ease-out infinite;
+    }
+    @keyframes ringPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    .check-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .check-circle svg {
+      animation: drawCheck 0.4s 0.3s ease both;
+    }
+    @keyframes drawCheck {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Decorative line group */
+    .deco-lines {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .deco-line { width: 40px; height: 1px; background: var(--gold); }
+    .deco-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .thanks-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+
+    .thanks-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0.6rem 0 1rem;
+      animation: fadeUp 0.6s 0.55s ease both;
+    }
+    .thanks-heading em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .thanks-message {
+      font-size: 0.85rem;
+      color: var(--mid);
+      line-height: 1.9;
+      max-width: 440px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.65s ease both;
+    }
+
+    /* Order summary box */
+    .order-box {
+      border: 1px solid var(--gold-light);
+      background: var(--warm-white);
+      padding: 1.8rem 2.5rem;
+      max-width: 440px;
+      width: 100%;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.75s ease both;
+    }
+    .order-box-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1.2rem;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gold-light);
+      margin-bottom: 1rem;
+    }
+    .order-thumb {
+      width: 48px;
+      height: 48px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .order-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .order-item-meta { font-size: 0.68rem; color: var(--mid); }
+
+    .order-rows { width: 100%; }
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-bottom: 0.5rem;
+    }
+    .order-divider { border: none; border-top: 1px solid var(--gold-light); margin: 0.8rem 0; }
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .order-total-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .order-total-amt {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+    }
+
+    /* Order ID */
+    .order-id-row {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--gold-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .order-id-label { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); }
+    .order-id-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; letter-spacing: 0.1em; }
+
+    /* CTA Button */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2.5rem;
+      background: transparent;
+      border: 1.5px solid var(--charcoal);
+      color: var(--charcoal);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+      animation: fadeUp 0.6s 0.85s ease both;
+    }
+    .cta-button:hover {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    /* Email note */
+    .email-note {
+      margin-top: 1.5rem;
+      font-size: 0.7rem;
+      color: var(--mid);
+      letter-spacing: 0.06em;
+      animation: fadeUp 0.6s 0.9s ease both;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--gold-light);
+      padding: 1.2rem;
+      text-align: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    @media (max-width: 600px) {
+      .thanks-heading { font-size: 2.2rem; }
+      .order-box { padding: 1.2rem; }
+      .step-line { width: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Purchase Event -->
+
+<nav>
+  <a class="nav-brand" href="index.html">Lumière</a>
+</nav>
+
+<!-- All steps done -->
+<div class="steps">
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">商品</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">カート</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">購入手続き</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">完了</div>
+  </div>
+</div>
+
+<main class="thanks-main">
+
+  <!-- Animated checkmark -->
+  <div class="check-container">
+    <div class="check-ring"></div>
+    <div class="check-circle">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M8 18l7 7 13-13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="deco-lines">
+    <div class="deco-line"></div>
+    <div class="deco-diamond"></div>
+    <div class="deco-line"></div>
+  </div>
+
+  <p class="thanks-label">Order Confirmed</p>
+
+  <h1 class="thanks-heading">
+    Thank you for<br />your <em>purchase</em>
+  </h1>
+
+  <p class="thanks-message">
+    ご注文ありがとうございます。<br />
+    ご注文確認メールをお送りしました。<br />
+    商品は3〜5営業日以内にお届けします。
+  </p>
+
+  <!-- Order summary -->
+  <div class="order-box">
+    <div class="order-box-title">注文サマリー</div>
+
+    <div class="order-item">
+      <div class="order-thumb">
+        <svg viewBox="0 0 44 64" xmlns="http://www.w3.org/2000/svg" width="30" height="44">
+          <defs>
+            <linearGradient id="miniB3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f5f0e8"/>
+              <stop offset="100%" stop-color="#c9a96e"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="8" width="5" height="8" rx="1" fill="#e0cfa0"/>
+          <rect x="4" y="6" width="9" height="5" rx="1.5" fill="#2a2520"/>
+          <rect x="4" y="16" width="14" height="38" rx="3" fill="url(#miniB3)"/>
+          <rect x="6" y="21" width="10" height="26" rx="2" fill="rgba(255,255,255,0.45)"/>
+          <text x="11" y="33" text-anchor="middle" font-size="3.5" fill="#7a6e65" font-family="serif">AI</text>
+          <text x="11" y="39" text-anchor="middle" font-size="3" fill="#7a6e65" font-family="serif">SERUM</text>
+        </svg>
+      </div>
+      <div>
+        <div class="order-item-name">AI Beauty Serum</div>
+        <div class="order-item-meta" id="thanks-qty">30ml · 数量: 1</div>
+      </div>
+    </div>
+
+    <div class="order-rows">
+      <div class="order-row">
+        <span>小計</span>
+        <span id="thanks-subtotal">¥4,200</span>
+      </div>
+      <div class="order-row">
+        <span>配送料</span>
+        <span style="color:#c9a96e;">無料</span>
+      </div>
+      <hr class="order-divider" />
+      <div class="order-total">
+        <span class="order-total-label">合計（税込）</span>
+        <span class="order-total-amt" id="thanks-total">¥4,200</span>
+      </div>
+      <div class="order-id-row">
+        <span class="order-id-label">注文番号</span>
+        <span class="order-id-value" id="order-id">—</span>
+      </div>
+    </div>
+  </div>
+
+  <a class="cta-button" href="index.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    ショッピングを続ける
+  </a>
+
+  <p class="email-note">ご注文確認メールをご登録のメールアドレスへお送りしました。</p>
+
+</main>
+
+<footer>
+  © 2024 Lumière Beauty · All rights reserved
+</footer>
+
+<script>
+  // Load order data from session
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '{"quantity":1,"total":4200}');
+  const orderId = sessionStorage.getItem('orderId') || 'LM' + Math.floor(Math.random()*999999).toString().padStart(6,'0');
+
+  if (cart.quantity) {
+    document.getElementById('thanks-qty').textContent = '30ml · 数量: ' + cart.quantity;
+    document.getElementById('thanks-subtotal').textContent = '¥' + cart.total.toLocaleString();
+    document.getElementById('thanks-total').textContent = '¥' + cart.total.toLocaleString();
+  }
+  document.getElementById('order-id').textContent = orderId;
+
+  // Purchase event data (for GTM / TikTok Pixel reference via dataLayer push)
+  // GTM will pick this up when TikTok Pixel is configured
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'purchase',
+    content_id: 'beauty_serum_001',
+    content_type: 'product',
+    value: cart.total || 4200,
+    currency: 'JPY',
+    quantity: cart.quantity || 1
+  });
+</script>
+
+</body>
+</html>

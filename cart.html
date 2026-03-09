@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIÈRE — カート</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf7f2;
+      --warm-white: #f5f0e8;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --charcoal: #2a2520;
+      --mid: #7a6e65;
+      --accent: #b8860b;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 2.5rem;
+      border-bottom: 1px solid var(--gold-light);
+      background: var(--cream);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--gold); }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      padding: 2rem 1rem 1rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .step.active .step-circle { background: var(--charcoal); color: var(--cream); }
+    .step.done .step-circle { background: var(--gold); color: var(--cream); }
+    .step.inactive .step-circle { background: transparent; border: 1px solid var(--gold-light); color: var(--mid); }
+    .step-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .step.active .step-label { color: var(--charcoal); }
+    .step-line {
+      width: 60px;
+      height: 1px;
+      background: var(--gold-light);
+      margin: 0 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    /* MAIN */
+    .cart-container {
+      max-width: 720px;
+      margin: 1rem auto 3rem;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 0.3rem;
+    }
+    .section-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2rem;
+    }
+
+    /* CART CARD */
+    .cart-card {
+      border: 1px solid var(--gold-light);
+      background: #fff;
+      padding: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    /* mini bottle SVG */
+    .item-thumb {
+      background: var(--warm-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 90px;
+    }
+    .item-thumb svg {
+      width: 44px;
+      height: 64px;
+    }
+
+    .item-info {}
+    .item-brand {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .item-meta {
+      font-size: 0.7rem;
+      color: var(--mid);
+      letter-spacing: 0.06em;
+    }
+
+    .item-qty-price {
+      text-align: right;
+    }
+    .qty-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.4rem;
+    }
+    .qty-display {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-bottom: 0.75rem;
+    }
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--gold-light);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .qty-btn:hover { border-color: var(--gold); }
+    .qty-value {
+      font-size: 0.85rem;
+      min-width: 20px;
+      text-align: center;
+    }
+    .item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+    }
+
+    /* ORDER SUMMARY */
+    .order-summary {
+      border: 1px solid var(--gold-light);
+      background: var(--warm-white);
+      padding: 1.5rem;
+    }
+    .summary-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1.2rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      margin-bottom: 0.7rem;
+      color: var(--mid);
+    }
+    .summary-divider {
+      border: none;
+      border-top: 1px solid var(--gold-light);
+      margin: 1rem 0;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .total-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .total-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+
+    /* CHECKOUT BUTTON */
+    #checkout-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1rem 2rem;
+      margin-top: 1.5rem;
+      background: var(--charcoal);
+      color: var(--cream);
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s;
+    }
+    #checkout-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    #checkout-button:hover::before { transform: scaleX(1); }
+    #checkout-button span { position: relative; z-index: 1; }
+    #checkout-button:active { transform: scale(0.98); }
+
+    .security-note {
+      text-align: center;
+      margin-top: 0.8rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    @media (max-width: 600px) {
+      .cart-item { grid-template-columns: 70px 1fr; gap: 1rem; }
+      .item-qty-price { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+      nav { padding: 1rem 1.2rem; }
+      .step-line { width: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ViewCart Event -->
+
+<nav>
+  <a class="nav-brand" href="index.html">Lumière</a>
+  <a class="nav-back" href="index.html">
+    ← 買い物を続ける
+  </a>
+</nav>
+
+<!-- Step indicator -->
+<div class="steps">
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">商品</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step active">
+    <div class="step-circle">2</div>
+    <div class="step-label">カート</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step inactive">
+    <div class="step-circle">3</div>
+    <div class="step-label">購入手続き</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step inactive">
+    <div class="step-circle">4</div>
+    <div class="step-label">完了</div>
+  </div>
+</div>
+
+<div class="cart-container">
+  <h1 class="section-title">カート</h1>
+  <p class="section-sub">ご注文内容をご確認ください</p>
+
+  <!-- Cart Item -->
+  <div class="cart-card">
+    <div class="cart-item">
+      <div class="item-thumb">
+        <!-- Mini bottle SVG -->
+        <svg viewBox="0 0 44 64" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="miniBottle" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f5f0e8"/>
+              <stop offset="100%" stop-color="#c9a96e"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="8" width="5" height="8" rx="1" fill="#e0cfa0"/>
+          <rect x="4" y="6" width="9" height="5" rx="1.5" fill="#2a2520"/>
+          <rect x="4" y="16" width="14" height="38" rx="3" fill="url(#miniBottle)"/>
+          <rect x="6" y="21" width="10" height="26" rx="2" fill="rgba(255,255,255,0.45)"/>
+          <text x="11" y="33" text-anchor="middle" font-size="3.5" fill="#7a6e65" font-family="serif">AI</text>
+          <text x="11" y="39" text-anchor="middle" font-size="3" fill="#7a6e65" font-family="serif">SERUM</text>
+        </svg>
+      </div>
+
+      <div class="item-info">
+        <div class="item-brand">Lumière</div>
+        <div class="item-name">AI Beauty Serum</div>
+        <div class="item-meta">30ml · content_id: beauty_serum_001</div>
+      </div>
+
+      <div class="item-qty-price">
+        <div class="qty-label">数量</div>
+        <div class="qty-display">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-value" id="qty-display">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="item-price" id="item-price-display">¥4,200</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="order-summary">
+    <div class="summary-title">注文サマリー</div>
+    <div class="summary-row">
+      <span>小計</span>
+      <span id="subtotal">¥4,200</span>
+    </div>
+    <div class="summary-row">
+      <span>配送料</span>
+      <span style="color:#c9a96e;">無料</span>
+    </div>
+    <hr class="summary-divider" />
+    <div class="summary-total">
+      <span class="total-label">合計（税込）</span>
+      <span class="total-amount" id="total">¥4,200</span>
+    </div>
+
+    <!-- InitiateCheckout Event is on checkout.html, but checkout-button triggers navigation -->
+    <button id="checkout-button" onclick="goToCheckout()">
+      <span>購入手続きへ</span>
+      <svg style="position:relative;z-index:1;width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+    <div class="security-note">
+      <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
+        <path d="M5 0L0 2v4c0 3.3 2.1 5.7 5 6 2.9-.3 5-2.7 5-6V2L5 0z" fill="#c9a96e"/>
+      </svg>
+      SSL暗号化による安全なお支払い
+    </div>
+  </div>
+</div>
+
+<script>
+  let qty = 1;
+  const unitPrice = 4200;
+
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-display').textContent = qty;
+    const total = unitPrice * qty;
+    document.getElementById('item-price-display').textContent = '¥' + total.toLocaleString();
+    document.getElementById('subtotal').textContent = '¥' + total.toLocaleString();
+    document.getElementById('total').textContent = '¥' + total.toLocaleString();
+  }
+
+  function goToCheckout() {
+    const cart = {
+      name: 'AI Beauty Serum',
+      content_id: 'beauty_serum_001',
+      price: unitPrice,
+      currency: 'JPY',
+      quantity: qty,
+      total: unitPrice * qty
+    };
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    window.location.href = 'checkout.html';
+  }
+</script>
+
+</body>
+</html>

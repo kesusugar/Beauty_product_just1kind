@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIÈRE — 購入手続き</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf7f2;
+      --warm-white: #f5f0e8;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --charcoal: #2a2520;
+      --mid: #7a6e65;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 2.5rem;
+      border-bottom: 1px solid var(--gold-light);
+      background: var(--cream);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--gold); }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem 1rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 500;
+    }
+    .step.active .step-circle { background: var(--charcoal); color: var(--cream); }
+    .step.done .step-circle { background: var(--gold); color: var(--cream); }
+    .step.inactive .step-circle { background: transparent; border: 1px solid var(--gold-light); color: var(--mid); }
+    .step-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
+    .step.active .step-label { color: var(--charcoal); }
+    .step-line { width: 60px; height: 1px; background: var(--gold-light); margin: 0 0.5rem; margin-bottom: 1.2rem; }
+
+    /* LAYOUT */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 1.5rem auto 4rem;
+      padding: 0 2rem;
+      align-items: start;
+    }
+
+    /* FORM SECTION */
+    .section-block {
+      border: 1px solid var(--gold-light);
+      background: #fff;
+      padding: 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .block-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .block-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold-light);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    input, select {
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--gold-light);
+      background: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus { border-color: var(--gold); }
+    input::placeholder { color: #c0b8b0; }
+
+    /* PAYMENT */
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--gold-light);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .payment-option:hover { border-color: var(--gold); }
+    .payment-option input[type="radio"] { accent-color: var(--gold); width: 14px; height: 14px; }
+    .payment-label { font-size: 0.8rem; }
+    .payment-sub { font-size: 0.65rem; color: var(--mid); }
+
+    /* ORDER SIDEBAR */
+    .order-sidebar {}
+    .sidebar-card {
+      border: 1px solid var(--gold-light);
+      background: var(--warm-white);
+      padding: 1.5rem;
+      position: sticky;
+      top: 1rem;
+    }
+    .sidebar-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1.2rem;
+    }
+
+    /* product line in sidebar */
+    .sidebar-item {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--gold-light);
+    }
+    .sidebar-thumb {
+      width: 52px;
+      height: 52px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .sidebar-item-meta { font-size: 0.68rem; color: var(--mid); }
+
+    .sidebar-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--mid);
+      margin-bottom: 0.6rem;
+    }
+    .sidebar-divider { border: none; border-top: 1px solid var(--gold-light); margin: 0.8rem 0; }
+    .sidebar-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.5rem;
+    }
+    .total-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .total-amt {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+    }
+
+    /* PLACE ORDER BUTTON */
+    #place-order-button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--charcoal);
+      color: var(--cream);
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+    #place-order-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    #place-order-button:hover::before { transform: scaleX(1); }
+    #place-order-button span { position: relative; z-index: 1; }
+    #place-order-button:active { transform: scale(0.98); }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    @media (max-width: 760px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .order-sidebar { order: -1; }
+      .sidebar-card { position: static; }
+      nav { padding: 1rem 1.2rem; }
+      .step-line { width: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- InitiateCheckout Event -->
+
+<nav>
+  <a class="nav-brand" href="index.html">Lumière</a>
+  <a class="nav-back" href="cart.html">← カートに戻る</a>
+</nav>
+
+<!-- Step indicator -->
+<div class="steps">
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">商品</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step done">
+    <div class="step-circle">✓</div>
+    <div class="step-label">カート</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step active">
+    <div class="step-circle">3</div>
+    <div class="step-label">購入手続き</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step inactive">
+    <div class="step-circle">4</div>
+    <div class="step-label">完了</div>
+  </div>
+</div>
+
+<div class="checkout-layout">
+
+  <!-- LEFT: Form -->
+  <div class="checkout-form">
+
+    <!-- Shipping -->
+    <div class="section-block">
+      <div class="block-title">配送先情報</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="first-name">姓</label>
+          <input type="text" id="first-name" placeholder="山田" />
+        </div>
+        <div class="form-group">
+          <label for="last-name">名</label>
+          <input type="text" id="last-name" placeholder="花子" />
+        </div>
+        <div class="form-group full">
+          <label for="email">メールアドレス</label>
+          <input type="email" id="email" placeholder="example@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="postal">郵便番号</label>
+          <input type="text" id="postal" placeholder="000-0000" />
+        </div>
+        <div class="form-group">
+          <label for="prefecture">都道府県</label>
+          <select id="prefecture">
+            <option value="">選択してください</option>
+            <option>東京都</option>
+            <option>大阪府</option>
+            <option>神奈川県</option>
+            <option>愛知県</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="address">住所</label>
+          <input type="text" id="address" placeholder="市区町村・番地" />
+        </div>
+        <div class="form-group full">
+          <label for="address2">建物名・部屋番号（任意）</label>
+          <input type="text" id="address2" placeholder="マンション名 101号室" />
+        </div>
+        <div class="form-group full">
+          <label for="phone">電話番号</label>
+          <input type="tel" id="phone" placeholder="090-0000-0000" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="section-block">
+      <div class="block-title">お支払い方法</div>
+      <div class="payment-options">
+        <label class="payment-option">
+          <input type="radio" name="payment" value="card" checked />
+          <div>
+            <div class="payment-label">クレジットカード</div>
+            <div class="payment-sub">Visa · Mastercard · AMEX · JCB</div>
+          </div>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="payment" value="convenience" />
+          <div>
+            <div class="payment-label">コンビニ払い</div>
+            <div class="payment-sub">セブンイレブン · ファミリーマート · ローソン</div>
+          </div>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="payment" value="amazon" />
+          <div>
+            <div class="payment-label">Amazon Pay</div>
+            <div class="payment-sub">Amazonアカウントでお支払い</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="form-grid" id="card-fields">
+        <div class="form-group full">
+          <label for="card-number">カード番号</label>
+          <input type="text" id="card-number" placeholder="0000 0000 0000 0000" />
+        </div>
+        <div class="form-group">
+          <label for="card-expiry">有効期限</label>
+          <input type="text" id="card-expiry" placeholder="MM/YY" />
+        </div>
+        <div class="form-group">
+          <label for="card-cvc">セキュリティコード</label>
+          <input type="text" id="card-cvc" placeholder="CVC" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: Order Summary Sidebar -->
+  <div class="order-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">注文内容</div>
+
+      <div class="sidebar-item">
+        <div class="sidebar-thumb">
+          <svg viewBox="0 0 44 64" xmlns="http://www.w3.org/2000/svg" width="32" height="46">
+            <defs>
+              <linearGradient id="miniB2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5f0e8"/>
+                <stop offset="100%" stop-color="#c9a96e"/>
+              </linearGradient>
+            </defs>
+            <rect x="6" y="8" width="5" height="8" rx="1" fill="#e0cfa0"/>
+            <rect x="4" y="6" width="9" height="5" rx="1.5" fill="#2a2520"/>
+            <rect x="4" y="16" width="14" height="38" rx="3" fill="url(#miniB2)"/>
+            <rect x="6" y="21" width="10" height="26" rx="2" fill="rgba(255,255,255,0.45)"/>
+            <text x="11" y="33" text-anchor="middle" font-size="3.5" fill="#7a6e65" font-family="serif">AI</text>
+            <text x="11" y="39" text-anchor="middle" font-size="3" fill="#7a6e65" font-family="serif">SERUM</text>
+          </svg>
+        </div>
+        <div>
+          <div class="sidebar-item-name">AI Beauty Serum</div>
+          <div class="sidebar-item-meta" id="sidebar-qty">30ml · 数量: 1</div>
+        </div>
+      </div>
+
+      <div class="sidebar-row">
+        <span>小計</span>
+        <span id="sidebar-subtotal">¥4,200</span>
+      </div>
+      <div class="sidebar-row">
+        <span>配送料</span>
+        <span style="color:#c9a96e;">無料</span>
+      </div>
+      <hr class="sidebar-divider" />
+      <div class="sidebar-total">
+        <span class="total-label">合計（税込）</span>
+        <span class="total-amt" id="sidebar-total">¥4,200</span>
+      </div>
+
+      <!-- InitiateCheckout Event -->
+      <!-- place-order-button -->
+      <button id="place-order-button" onclick="placeOrder()">
+        <span>注文を確定する</span>
+        <svg style="position:relative;z-index:1;width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </button>
+
+      <div class="secure-badge">
+        <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
+          <path d="M5 0L0 2v4c0 3.3 2.1 5.7 5 6 2.9-.3 5-2.7 5-6V2L5 0z" fill="#c9a96e"/>
+        </svg>
+        SSL暗号化による安全な決済
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Load cart data
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '{"quantity":1,"total":4200}');
+  if (cart.quantity) {
+    document.getElementById('sidebar-qty').textContent = '30ml · 数量: ' + cart.quantity;
+    document.getElementById('sidebar-subtotal').textContent = '¥' + cart.total.toLocaleString();
+    document.getElementById('sidebar-total').textContent = '¥' + cart.total.toLocaleString();
+  }
+
+  function placeOrder() {
+    // Store order ID for thanks page
+    const orderId = 'LM' + Date.now().toString().slice(-6);
+    sessionStorage.setItem('orderId', orderId);
+    window.location.href = 'thanks.html';
+  }
+</script>
+
+</body>
+</html>
