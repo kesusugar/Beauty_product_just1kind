@@ -417,6 +417,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
   function addToCart() {
+    // 1. GTMにイベントを飛ばす（これを追加！）
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'addToCart', // ここがGTMのTrigger設定と一致します
+        'content_id': 'beauty_serum_001',
+        'value': 4200,
+        'currency': 'JPY'
+    });
     // Store cart info for subsequent pages
     sessionStorage.setItem('cart', JSON.stringify({
       name: 'AI Beauty Serum',
